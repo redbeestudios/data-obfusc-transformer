@@ -2,12 +2,14 @@ package transformer
 
 import java.util.Properties
 
-import com.typesafe.config.Config
-import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
+import com.typesafe.config.{ConfigFactory, ConfigRenderOptions, ConfigValueFactory}
+import org.apache.flink.streaming.api.scala._
+import org.apache.flink.streaming.api.scala.{OutputTag, StreamExecutionEnvironment}
 import org.slf4j.LoggerFactory
 import utils.KafkaUtils
 
 import scala.concurrent.ExecutionContext
+import scala.util.Try
 
 object MainRunner extends App {
   /**
@@ -19,7 +21,7 @@ object MainRunner extends App {
     env.enableCheckpointing(100)
     val properties: Properties = KafkaUtils.getProperties()
 
-    ObfuscateDataRunner.buildStream(properties, env)
+    ObfuscateDataRunner.startStream(properties, env)
   }
 }
 
@@ -28,10 +30,32 @@ object ObfuscateDataRunner {
   implicit val ec: ExecutionContext = ExecutionContext.global
   val logger: org.slf4j.Logger = LoggerFactory.getLogger(getClass)
 
-  def buildStream(properties: Properties, env: StreamExecutionEnvironment): Unit = {
+  def startStream(properties: Properties, env: StreamExecutionEnvironment): Unit = {
 
+    val pathsToObfuscate: List[String] = properties.getProperty("pathsToObfuscate").split("/").toList
+    val consumer = KafkaUtils.kafkaConsumer(properties)
 
+    val mapSideOutputs = Map(
+      "json-obfuscated" -> OutputTag[String]("json-obfuscated"),
+      "json-error" -> OutputTag[String]("json-error")
+    )
 
+    val mapProducers = Map(
+      "json-obfuscated" -> KafkaUtils.kafkaProducerObfuscated(properties),
+      "json-error" -> KafkaUtils.kafkaProducerErrors(properties)
+    )
+
+    val stream: DataStream[String] = env.addSource(consumer).rebalance
+    val streamProcessed: DataStream[String] =
+      stream.process{new ProcessFunctionObf(mapSideOutputs, pathsToObfuscate, logger)}
+
+    mapSideOutputs.foreach { case (key, outputtag) =>
+      streamProcessed.getSideOutput(outputtag).addSink(mapProducers(key))
+    }
+
+    env.execute()
   }
 
 }
+
+
