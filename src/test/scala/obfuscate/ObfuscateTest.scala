@@ -21,7 +21,7 @@ class ObfuscateTest extends FlatSpec with Matchers with EventHelper {
   props.setProperty("bootstrap.servers", kafkaContainer.getBootstrapServers)
   props.setProperty("group.id", "group_id_prueba")
   props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "obf_groupid")
-  props.setProperty("kafkaBrokerList", s"localhost:${kafkaContainer.getMappedPort(9092)}")
+  props.setProperty("kafka.broker", s"localhost:${kafkaContainer.getMappedPort(9092)}")
 
 
   val json =

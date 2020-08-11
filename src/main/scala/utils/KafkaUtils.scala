@@ -19,7 +19,7 @@ object KafkaUtils {
 
   def kafkaProducerErrors(properties: Properties): FlinkKafkaProducer[String] = {
     new FlinkKafkaProducer[String](
-      properties.getProperty("kafkaBrokerList"),
+      properties.getProperty("kafka.broker"),
       properties.getProperty("kafkaProducerErrorsTopic"),
       new SimpleStringSchema
     )
@@ -27,7 +27,7 @@ object KafkaUtils {
 
   def kafkaProducerObfuscated(properties: Properties): FlinkKafkaProducer[String] = {
     new FlinkKafkaProducer[String](
-      properties.getProperty("kafkaBrokerList"),
+      properties.getProperty("kafka.broker"),
       properties.getProperty("kafkaProducerObfuscatedTopic"),
       new SimpleStringSchema
     )

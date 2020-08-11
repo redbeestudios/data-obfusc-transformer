@@ -21,6 +21,13 @@ object MainRunner extends App {
     env.enableCheckpointing(100)
     val properties: Properties = KafkaUtils.getProperties()
 
+    System.getProperty("bootstrap.servers") match {
+      case prop: String => properties.setProperty("bootstrap.servers", prop)
+    }
+    System.getProperty("kafka.broker") match {
+      case prop: String => properties.setProperty("kafka.broker", prop)
+    }
+
     ObfuscateDataRunner.startStream(properties, env)
   }
 }
