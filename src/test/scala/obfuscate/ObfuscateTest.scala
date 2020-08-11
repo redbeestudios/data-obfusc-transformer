@@ -54,8 +54,6 @@ class ObfuscateTest extends FlatSpec with Matchers with EventHelper {
   val record = new ProducerRecord[String, String](topic,"11111", json)
   val invalidRecord = new ProducerRecord[String, String](topic,"11111", invalidJson)
 
-
-
   val env = StreamExecutionEnvironment.getExecutionEnvironment
   env.enableCheckpointing(100)
   Future(ObfuscateDataRunner.startStream(props, env))
