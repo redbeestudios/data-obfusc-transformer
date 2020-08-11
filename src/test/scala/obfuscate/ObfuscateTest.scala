@@ -2,12 +2,13 @@ package obfuscate
 
 import java.util.{Properties, UUID}
 
-import io.redbee.recommender.events.{EventHelper, RecView}
+import com.typesafe.config.ConfigFactory
+import io.redbee.recommender.events.{EventHelper}
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.scalatest.{FlatSpec, Matchers}
-import transformer.{MainRunner, ObfuscateDataRunner}
+import transformer.{ObfuscateDataStream}
 import utils.KafkaUtils
 
 import scala.collection.JavaConverters._
@@ -28,8 +29,8 @@ class ObfuscateTest extends FlatSpec with Matchers with EventHelper {
     """{
       | "order" :{
       |   "user":{
-      |      "name": "Martin",
-      |      "lastname": "Dran"
+      |      "name": "Nombre",
+      |      "lastname": "Apellido"
       |   },
       |   "products": [
       |     "item1", "item2", "item3"
@@ -41,8 +42,8 @@ class ObfuscateTest extends FlatSpec with Matchers with EventHelper {
     """{
       | "order" :{
       |   "user":{
-      |      "name": "Martin",
-      |      "XXXX": "Dran"
+      |      "name": "Nombre",
+      |      "XXXX": "Apellido"
       |   },
       |   "products": [
       |     "item1", "item2", "item3"
@@ -56,7 +57,7 @@ class ObfuscateTest extends FlatSpec with Matchers with EventHelper {
 
   val env = StreamExecutionEnvironment.getExecutionEnvironment
   env.enableCheckpointing(100)
-  Future(ObfuscateDataRunner.startStream(props, env))
+  Future(ObfuscateDataStream.startStream(props, env))
   Thread.sleep(5000)
 
   val consValid = consumer(UUID.randomUUID().toString)
@@ -79,12 +80,17 @@ class ObfuscateTest extends FlatSpec with Matchers with EventHelper {
 
     val ansValid = consValid.poll(1000).asScala
     Thread.sleep(1000)
-    ansValid.foreach { x => println("\n valid record: " + x.value() + "\n") }
-
     ansValid.size shouldBe 3
+    ansValid.foreach { x =>
+      val cfg = ConfigFactory.parseString(x.value())
+      val paths = props.getProperty("pathsToObfuscate").split("/")
+      cfg.getString(paths(0)) shouldNot be("Nombre")
+      cfg.getString(paths(1)) shouldNot be ("Apellido")
+      println("\n valid record: " + x.value() + "\n")
+    }
 
     val ansInvalid = consInvalid.poll(1000).asScala
-    Thread.sleep(1000)
+    Thread.sleep(3000)
     ansInvalid.foreach { x => println("\n invalid record: " + x.value() + "\n") }
 
     ansInvalid.size shouldBe 2
