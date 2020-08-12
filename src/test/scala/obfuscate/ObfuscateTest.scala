@@ -2,7 +2,6 @@ package obfuscate
 
 import java.util.{Properties, UUID}
 
-import com.typesafe.config.ConfigFactory
 import io.redbee.recommender.events.{EventHelper}
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -10,7 +9,7 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.scalatest.{FlatSpec, Matchers}
 import transformer.{ObfuscateDataStream}
 import utils.KafkaUtils
-
+import ujson.Js
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -51,9 +50,23 @@ class ObfuscateTest extends FlatSpec with Matchers with EventHelper {
       | }
       |}""".stripMargin
 
+  val invalidJson2 =
+    """{
+      | "order" :{
+      |   "CCCCC":{
+      |      "name": "Nombre",
+      |      "lastname": "Apellido"
+      |   },
+      |   "products": [
+      |     "item1", "item2", "item3"
+      |   ]
+      | }
+      |}""".stripMargin
+
   val topic = props.getProperty("kafkaConsumerTopic")
   val record = new ProducerRecord[String, String](topic,"11111", json)
   val invalidRecord = new ProducerRecord[String, String](topic,"11111", invalidJson)
+  val invalidRecord2 = new ProducerRecord[String, String](topic,"11111", invalidJson2)
 
   val env = StreamExecutionEnvironment.getExecutionEnvironment
   env.enableCheckpointing(100)
@@ -73,26 +86,27 @@ class ObfuscateTest extends FlatSpec with Matchers with EventHelper {
   producer.send(record, callback)
   producer.send(invalidRecord, callback)
   producer.send(invalidRecord, callback)
+  producer.send(invalidRecord2, callback)
 
   Thread.sleep(10000)
 
   "json and invalidJson" should "be posted in kafkaProducerObfuscatedTopic and kafkaProducerErrorsTopic" in {
 
-    val ansValid = consValid.poll(3000).asScala
+    val ansValid = consValid.poll(10000).asScala
     Thread.sleep(1000)
     ansValid.size shouldBe 3
     ansValid.foreach { x =>
       val jsonObj = ujson.read(x.value())
-      jsonObj("order")("user")("name") shouldNot be("Nombre")
-      jsonObj("order")("user")("lastname") shouldNot be ("Apellido")
+      jsonObj("order")("user")("name").value shouldBe "X".toString
+      jsonObj("order")("user")("lastname").value shouldBe "X".toString
       println("\n valid record: " + x.value() + "\n")
     }
 
-    val ansInvalid = consInvalid.poll(3000).asScala
-    Thread.sleep(4000)
+    val ansInvalid = consInvalid.poll(10000).asScala
+    Thread.sleep(1000)
     ansInvalid.foreach { x => println("\n invalid record: " + x.value() + "\n") }
 
-    ansInvalid.size shouldBe 2
+    ansInvalid.size shouldBe 3
   }
 
 

@@ -46,7 +46,6 @@ class ProcessFunctionObf(sideOutputsMap: Map[String, OutputTag[String]],
               ctx.output(sideOutputsMap("json-obfuscated"), jsonCfg)
 
           }
-
       }
     }
 
@@ -54,7 +53,7 @@ class ProcessFunctionObf(sideOutputsMap: Map[String, OutputTag[String]],
     val key: String = path(keyIndex)
     Try(json(key)) match {
       case Failure(ex) => throw new Exception(ex)
-      case Success(_) => if (key == path.last) json(key) = "XXX" else obfuscate(json(key), path, keyIndex+1 )
+      case Success(_) => if (key == path.last) json(key) = "X" else obfuscate(json(key), path, keyIndex+1 )
     }
   }
 
