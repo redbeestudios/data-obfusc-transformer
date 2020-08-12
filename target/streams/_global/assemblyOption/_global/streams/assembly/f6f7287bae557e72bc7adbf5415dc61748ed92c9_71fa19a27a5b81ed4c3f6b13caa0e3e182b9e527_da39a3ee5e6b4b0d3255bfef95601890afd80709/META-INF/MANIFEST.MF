@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: schwatcher
-Implementation-Version: 0.3.2
-Specification-Vendor: com.beachape.filemanagement
-Specification-Title: schwatcher
-Implementation-Vendor-Id: com.beachape.filemanagement
-Specification-Version: 0.3.2
-Implementation-Vendor: com.beachape.filemanagement
-

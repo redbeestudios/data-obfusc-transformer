@@ -1,3 +1,0 @@
-[0m[[0m[0minfo[0m] [0m[0m[32mObfuscateTest:[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mjson and invalidJson[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should be posted in kafkaProducerObfuscatedTopic and kafkaProducerErrorsTopic[0m[0m

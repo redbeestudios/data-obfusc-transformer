@@ -1,3 +1,0 @@
-org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.ObjectMapper
-org.apache.flink.shaded.jackson2.com.fasterxml.jackson.dataformat.yaml.YAMLMapper
-org.apache.flink.shaded.jackson2.com.fasterxml.jackson.dataformat.csv.CsvMapper

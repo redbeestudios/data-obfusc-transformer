@@ -1,6 +1,0 @@
-[0m[[0m[33mwarn[0m] [0m[0m/home/dran/Escritorio/Martin/RECOMMENDER MASTER 2K/DEMOs/data-obf-transformer/src/main/scala/transformer/ProcessFunction.scala:21:5: match may not be exhaustive.[0m
-[0m[[0m[33mwarn[0m] [0m[0mIt would fail on the following input: Failure((x: Throwable forSome x not in Exception))[0m
-[0m[[0m[33mwarn[0m] [0m[0m    newUjson match {[0m
-[0m[[0m[33mwarn[0m] [0m[0m    ^[0m
-[0m[[0m[33mwarn[0m] [0m[0mthere were three deprecation warnings; re-run with -deprecation for details[0m
-[0m[[0m[33mwarn[0m] [0m[0mtwo warnings found[0m

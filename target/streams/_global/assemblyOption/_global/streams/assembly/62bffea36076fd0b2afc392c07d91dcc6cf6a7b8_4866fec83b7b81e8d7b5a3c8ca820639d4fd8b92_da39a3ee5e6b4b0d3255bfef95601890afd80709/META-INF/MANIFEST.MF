@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: ofertador-etls
-Implementation-Version: 0.1-SNAPSHOT
-Specification-Vendor: io.redbee
-Specification-Title: ofertador-etls
-Implementation-Vendor-Id: io.redbee
-Specification-Version: 0.1-SNAPSHOT
-Implementation-Vendor: io.redbee
-
