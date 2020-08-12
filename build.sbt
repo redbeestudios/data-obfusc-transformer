@@ -34,9 +34,6 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "com.lihaoyi" %% "upickle"  % "0.7.4")
 
-libraryDependencies += "io.redbee" %% "ofertador-etls" % "0.1-SNAPSHOT"  notTransitive() //intransitive()
-libraryDependencies += "io.redbee" %% "ofertador-etls" % "0.1-SNAPSHOT" % "test" classifier "tests" notTransitive() //intransitive()
-
 libraryDependencies += "net.manub" %% "scalatest-embedded-kafka" % "2.0.0" % "test"
 libraryDependencies += "net.manub" %% "scalatest-embedded-kafka-streams" % "2.0.0" % "test"
 libraryDependencies += "com.dimafeng" %% "testcontainers-scala-scalatest" % testcontainersScalaVersion % "test"

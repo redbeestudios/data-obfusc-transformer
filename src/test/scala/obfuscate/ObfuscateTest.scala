@@ -2,18 +2,68 @@ package obfuscate
 
 import java.util.{Properties, UUID}
 
-import io.redbee.recommender.events.{EventHelper}
+import akka.Done
+import com.dimafeng.testcontainers.{ForAllTestContainer, KafkaContainer}
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
-import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer}
+import org.apache.kafka.clients.producer.{Callback, KafkaProducer, ProducerConfig, ProducerRecord, RecordMetadata}
+import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
 import org.scalatest.{FlatSpec, Matchers}
-import transformer.{ObfuscateDataStream}
+import org.testcontainers.containers.Network
+import transformer.ObfuscateDataStream
 import utils.KafkaUtils
+
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class ObfuscateTest extends FlatSpec with Matchers with EventHelper {
+class ObfuscateTest extends FlatSpec with Matchers with ForAllTestContainer{
+
+  val network = Network.newNetwork()
+
+  override val container = KafkaContainer().configure { c =>
+    c.withNetwork(network).withNetworkAliases("kafka")
+    c.withEmbeddedZookeeper()
+  }
+
+  def kafkaContainer = container.container
+
+  kafkaContainer.start()
+
+
+  val producer: KafkaProducer[String, String] = {
+
+    val configProperties = new Properties()
+    configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers)
+    configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer])
+    configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer])
+    configProperties.put("enable.auto.commit","true")
+    configProperties.put("auto.offset.reset","earliest")
+
+    new KafkaProducer[String, String](configProperties)
+  }
+
+  val callback: Callback = new Callback {
+    override def onCompletion(metadata: RecordMetadata, exception: Exception): Unit =
+      Option(exception) match {
+        case Some(ex) => //logger.error("error at producing message", ex)
+        case None     => Done
+      }
+  }
+
+  def consumerProperties(consumerId: String): java.util.Map[String, Object] = {
+    Map[String, Object](
+      ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> kafkaContainer.getBootstrapServers,
+      ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer],
+      ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer],
+      "group.id" -> consumerId
+    ).asJava
+  }
+
+  def consumer(consumerGroupId: String): KafkaConsumer[String, String] = {
+    new KafkaConsumer[String, String](consumerProperties(consumerGroupId))
+  }
+
   implicit val ec = ExecutionContext.global
   val props: Properties = KafkaUtils.getProperties()
 
@@ -81,18 +131,23 @@ class ObfuscateTest extends FlatSpec with Matchers with EventHelper {
   consInvalid.poll(1000).asScala.size shouldBe 0
 
   producer.send(record, callback)
+  Thread.sleep(2000)
   producer.send(record, callback)
+  Thread.sleep(2000)
   producer.send(record, callback)
+  Thread.sleep(2000)
   producer.send(invalidRecord, callback)
+  Thread.sleep(2000)
   producer.send(invalidRecord, callback)
+  Thread.sleep(2000)
   producer.send(invalidRecord2, callback)
+  Thread.sleep(2000)
 
-  Thread.sleep(10000)
 
   "json and invalidJson" should "be posted in kafkaProducerObfuscatedTopic and kafkaProducerErrorsTopic" in {
 
-    val ansValid = consValid.poll(10000).asScala
-    Thread.sleep(1000)
+    val ansValid = consValid.poll(60000).asScala
+    Thread.sleep(5000)
     ansValid.size shouldBe 3
     ansValid.foreach { x =>
       val jsonObj = ujson.read(x.value())
@@ -101,8 +156,8 @@ class ObfuscateTest extends FlatSpec with Matchers with EventHelper {
       println("\n valid record: " + x.value() + "\n")
     }
 
-    val ansInvalid = consInvalid.poll(10000).asScala
-    Thread.sleep(1000)
+    val ansInvalid = consInvalid.poll(60000).asScala
+    Thread.sleep(5000)
     ansInvalid.foreach { x => println("\n invalid record: " + x.value() + "\n") }
 
     ansInvalid.size shouldBe 3
