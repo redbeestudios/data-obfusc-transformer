@@ -6,3 +6,9 @@ services:
     container_name: "data-obf-transformer"
     network_mode: host
     restart: on-failure
+    environment:
+    - bootstrap.servers=localhost:9092
+    - kafka.broker=localhost:9092    
+    - zookeeper.connect=localhost:2181
+
+#registry.dev.redbee.io/
