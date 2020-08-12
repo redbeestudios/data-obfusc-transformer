@@ -1,8 +1,8 @@
-[debug] "not up to date. inChanged = true, force = false
-[debug] Updating ...
-[debug] Done updating 
-[warn] There may be incompatibilities among your library dependencies; run 'evicted' to see detailed eviction warnings.
-[warn] Found intransitive dependency (io.redbee:ofertador-etls_2.11:0.1-SNAPSHOT intransitive) while publishMavenStyle is true, but Maven repositories
-[warn]   do not support intransitive dependencies. Use exclusions instead so transitive dependencies
-[warn]   will be correctly excluded in dependent projects.
-[warn]            
+[0m[[0m[0mdebug[0m] [0m[0m"not up to date. inChanged = true, force = true[0m
+[0m[[0m[0mdebug[0m] [0m[0mUpdating ...[0m
+[0m[[0m[0mdebug[0m] [0m[0mDone updating [0m
+[0m[[0m[33mwarn[0m] [0m[0mThere may be incompatibilities among your library dependencies; run 'evicted' to see detailed eviction warnings.[0m
+[0m[[0m[33mwarn[0m] [0m[0mFound intransitive dependency (io.redbee:ofertador-etls_2.11:0.1-SNAPSHOT intransitive) while publishMavenStyle is true, but Maven repositories[0m
+[0m[[0m[33mwarn[0m] [0m[0m  do not support intransitive dependencies. Use exclusions instead so transitive dependencies[0m
+[0m[[0m[33mwarn[0m] [0m[0m  will be correctly excluded in dependent projects.[0m
+[0m[[0m[33mwarn[0m] [0m[0m           [0m

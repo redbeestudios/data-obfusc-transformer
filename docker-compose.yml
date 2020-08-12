@@ -1,0 +1,8 @@
+version: '3'
+services:
+
+  data-obfuscate:
+    image: zelig-data-obfuscate:1.0.0-SNAPSHOT
+    container_name: "data-obf-transformer"
+    network_mode: host
+    restart: on-failure

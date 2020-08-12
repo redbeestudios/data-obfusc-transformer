@@ -2,15 +2,9 @@ package transformer
 
 import java.util.Properties
 
-import com.typesafe.config.{ConfigFactory, ConfigRenderOptions, ConfigValueFactory}
-import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.scala.{OutputTag, StreamExecutionEnvironment}
-import org.slf4j.LoggerFactory
 import utils.KafkaUtils
-import ujson.{Js, Value}
 
-import scala.concurrent.ExecutionContext
-import scala.util.{Failure, Success, Try}
 
 object MainRunner extends App {
   /**

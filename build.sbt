@@ -1,7 +1,4 @@
 import sbt.Keys.libraryDependencies
-import sbt.ModuleID
-import sbt.internal.IvyConsole.Dependencies
-
 
 name := "data-obf-transformer"
 
@@ -46,3 +43,6 @@ libraryDependencies += "com.dimafeng" %% "testcontainers-scala-scalatest" % test
 libraryDependencies += "com.dimafeng" %% "testcontainers-scala-kafka" % testcontainersScalaVersion % "test"
 
 libraryDependencies += "com.lihaoyi" %% "ujson" % "0.6.5"
+
+resolvers += "Snowplow Analytics" at "http://maven.snplow.com/releases/"
+

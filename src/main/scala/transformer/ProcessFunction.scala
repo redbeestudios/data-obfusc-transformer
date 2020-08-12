@@ -1,8 +1,5 @@
 package transformer
 
-import java.util.UUID
-
-import com.typesafe.config.{Config, ConfigFactory, ConfigRenderOptions, ConfigValueFactory}
 import org.apache.flink.streaming.api.functions.ProcessFunction
 import org.apache.flink.streaming.api.scala.OutputTag
 import org.apache.flink.util.Collector
@@ -29,7 +26,6 @@ class ProcessFunctionObf(sideOutputsMap: Map[String, OutputTag[String]],
 
         case Success(ujson: Value) =>
           Try{
-            //var auxCfg = ujson
             pathsToObfuscate.foreach{path =>
               val listPath = path.split('.').toList
               obfuscate(ujson, listPath, 0)
