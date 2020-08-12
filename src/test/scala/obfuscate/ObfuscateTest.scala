@@ -9,7 +9,6 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.scalatest.{FlatSpec, Matchers}
 import transformer.{ObfuscateDataStream}
 import utils.KafkaUtils
-import ujson.Js
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
 

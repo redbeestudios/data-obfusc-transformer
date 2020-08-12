@@ -1,8 +1,0 @@
-[debug] "not up to date. inChanged = true, force = false
-[debug] Updating ProjectRef(uri("file:/home/dran/Escritorio/Martin/RECOMMENDER%20MASTER%202K/DEMOs/data-obf-transformer/"), "data-obf-transformer")...
-[debug] Done updating ProjectRef(uri("file:/home/dran/Escritorio/Martin/RECOMMENDER%20MASTER%202K/DEMOs/data-obf-transformer/"), "data-obf-transformer")
-[warn] There may be incompatibilities among your library dependencies; run 'evicted' to see detailed eviction warnings.
-[warn] Found intransitive dependency (io.redbee:ofertador-etls_2.11:0.1-SNAPSHOT intransitive) while publishMavenStyle is true, but Maven repositories
-[warn]   do not support intransitive dependencies. Use exclusions instead so transitive dependencies
-[warn]   will be correctly excluded in dependent projects.
-[warn]            
