@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: akka-http-circe
+Implementation-Version: 1.15.0
+Specification-Vendor: de.heikoseeberger
+Specification-Title: akka-http-circe
+Implementation-Vendor-Id: de.heikoseeberger
+Specification-Version: 1.15.0
+Implementation-URL: https://github.com/hseeberger/akka-http-json
+Implementation-Vendor: de.heikoseeberger
+

@@ -1,0 +1,21 @@
+// ------------------------------------------------------------------
+// Transitive dependencies of this project determined from the
+// maven pom organized by organization.
+// ------------------------------------------------------------------
+
+flink-shaded-asm-7
+
+
+From: 'OW2' (http://www.ow2.org/)
+  - asm (http://asm.ow2.org/) org.ow2.asm:asm:jar:7.1
+    License: BSD  (http://asm.ow2.org/license.html)
+  - asm-analysis (http://asm.ow2.org/) org.ow2.asm:asm-analysis:jar:7.1
+    License: BSD  (http://asm.ow2.org/license.html)
+  - asm-commons (http://asm.ow2.org/) org.ow2.asm:asm-commons:jar:7.1
+    License: BSD  (http://asm.ow2.org/license.html)
+  - asm-tree (http://asm.ow2.org/) org.ow2.asm:asm-tree:jar:7.1
+    License: BSD  (http://asm.ow2.org/license.html)
+
+
+
+

@@ -1,0 +1,25 @@
+{
+	"engineId": "views_by_user",
+	"engineFactory": "com.actionml.engines.ur.UREngine",
+	"mirrorContainer": "/tmp/views_by_user/local_engine",
+	"mirrorType": "localfs",
+	"sparkConf": {
+	"master": "local",
+	"spark.driver.memory": "4g",
+	"spark.executor.memory": "4g",
+	"spark.es.index.auto.create": "true",
+	"spark.es.nodes.wan.only": "true",
+	"spark.kryo.referenceTracking": "false",
+	"spark.kryo.registrator": "org.apache.mahout.sparkbindings.io.MahoutKryoRegistrator",
+	"spark.kryoserializer.buffer": "300m",
+	"spark.serializer": "org.apache.spark.serializer.KryoSerializer",
+	"spark.testing.memory": "481859200",
+	"spark.es.nodes": "elasticsearch"
+	},
+	"algorithm":{
+		"indicators": [
+			{ "name": "view" }
+		],
+	"num": 10
+	}
+}

@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: grizzled-slf4j
+Implementation-Version: 1.3.2
+Specification-Vendor: org.clapper
+Specification-Title: grizzled-slf4j
+Implementation-Vendor-Id: org.clapper
+Specification-Version: 1.3.2
+Implementation-URL: http://software.clapper.org/grizzled-slf4j/
+Implementation-Vendor: org.clapper
+

@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: healthchecks-core
+Implementation-Version: 0.3.0
+Specification-Vendor: Shingo Omura
+Specification-Title: healthchecks-core
+Implementation-Vendor-Id: com.github.everpeace
+Specification-Version: 0.3.0
+Implementation-URL: https://github.com/everpeace/healthchecks
+Implementation-Vendor: Shingo Omura
+

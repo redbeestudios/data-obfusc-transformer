@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Implementation-Title: flink-shaded-asm-7
+Implementation-Version: 7.1-9.0
+Archiver-Version: Plexus Archiver
+Built-By: zento
+Specification-Vendor: The Apache Software Foundation
+Specification-Title: flink-shaded-asm-7
+Implementation-Vendor-Id: org.apache.flink
+Implementation-Vendor: The Apache Software Foundation
+Created-By: Apache Maven 3.2.5
+Build-Jdk: 1.8.0_222
+Specification-Version: 7.1
+Implementation-URL: http://flink.apache.org/flink-shaded-asm-7
+
