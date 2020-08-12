@@ -6,12 +6,13 @@ import com.typesafe.config.{Config, ConfigFactory, ConfigRenderOptions, ConfigVa
 import org.apache.flink.streaming.api.functions.ProcessFunction
 import org.apache.flink.streaming.api.scala.OutputTag
 import org.apache.flink.util.Collector
+import ujson.Value
 
 import scala.util.{Failure, Success, Try}
 
 class ProcessFunctionObf(sideOutputsMap: Map[String, OutputTag[String]],
-                                  pathsToObfuscate: List[String],
-                                  logger: org.slf4j.Logger) extends ProcessFunction[String, String] {
+                         pathsToObfuscate: List[String],
+                         logger: org.slf4j.Logger) extends ProcessFunction[String, String] {
 
   override def processElement(data: String,
                               ctx: ProcessFunction[String, String]#Context,
@@ -19,29 +20,29 @@ class ProcessFunctionObf(sideOutputsMap: Map[String, OutputTag[String]],
     /**
      * Procesa el HarnessEvent para pasarlo a Json. Luego lo incluye en el correspondiente sideOutput
      */
-      val newCfg = Try{ConfigFactory.parseString(data)}
-      newCfg match {
+      val newUjson = Try{ujson.read(data)}
+    newUjson match {
         case Failure(ex: Exception) =>
           val msg = s"Error. Unable to parse json event: ${ex.getMessage}."  + "["+data+"]"
           logger.error(msg, ex)
           ctx.output(sideOutputsMap("json-error"), msg)
 
-        case Success(cfg: Config) =>
+        case Success(ujson: Value) =>
           Try{
-            var auxCfg = cfg
+            //var auxCfg = ujson
             pathsToObfuscate.foreach{path =>
-              auxCfg.getAnyRef(path)
-              val obfs = UUID.randomUUID().toString
-              auxCfg = auxCfg.withValue(path, ConfigValueFactory.fromAnyRef(obfs))}
-            auxCfg
+              val listPath = path.split('.').toList
+              obfuscate(ujson, listPath, 0)
+            }
+            ujson
           } match {
             case Failure(ex) =>
               val msg = s"Error. Unable to obfuscate event: ${ex.getMessage}."  + "["+data+"]"
               logger.error(msg, ex)
               ctx.output(sideOutputsMap("json-error"), msg)
 
-            case Success(obfsCfg: Config) =>
-              val jsonCfg: String = obfsCfg.root().render(ConfigRenderOptions.concise())
+            case Success(ujson: Value) =>
+              val jsonCfg: String = ujson.toString()
               ctx.output(sideOutputsMap("json-obfuscated"), jsonCfg)
 
           }
@@ -49,4 +50,14 @@ class ProcessFunctionObf(sideOutputsMap: Map[String, OutputTag[String]],
       }
     }
 
+  def obfuscate(json: Value, path: List[String], keyIndex: Int): Unit = {
+    val key: String = path(keyIndex)
+    Try(json(key)) match {
+      case Failure(ex) => throw new Exception(ex)
+      case Success(_) => if (key == path.last) json(key) = "XXX" else obfuscate(json(key), path, keyIndex+1 )
+    }
   }
+
+}
+
+

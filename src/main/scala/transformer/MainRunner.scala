@@ -7,9 +7,10 @@ import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.scala.{OutputTag, StreamExecutionEnvironment}
 import org.slf4j.LoggerFactory
 import utils.KafkaUtils
+import ujson.{Js, Value}
 
 import scala.concurrent.ExecutionContext
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 object MainRunner extends App {
   /**
@@ -38,3 +39,34 @@ object MainRunner extends App {
   }
 }
 
+
+object testUJson extends App {
+
+  val jsonStr =
+    """{
+      | "order" :{
+      |   "user":{
+      |      "name": "Nombre",
+      |      "lastname": "Apellido"
+      |   },
+      |   "products": [
+      |     "item1", "item2", "item3"
+      |   ]
+      | }
+      |}""".stripMargin
+
+
+  val path = "order.user.lastname".split('.').toList
+  val json = ujson.read(jsonStr)
+
+  def obfuscate(json: Value, path: List[String], keyIndex: Int): Unit = {
+    val key: String = path(keyIndex)
+    Try(json(key)) match {
+      case Failure(ex) => throw new Exception(ex)
+      case Success(_) => if (key == path.last) json(key) = "XXX" else obfuscate(json(key), path, keyIndex+1 )
+    }
+  }
+  print(json.toString()+"\n")
+  obfuscate(json, path, 0)
+  print(json.toString())
+}

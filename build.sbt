@@ -44,3 +44,5 @@ libraryDependencies += "net.manub" %% "scalatest-embedded-kafka" % "2.0.0" % "te
 libraryDependencies += "net.manub" %% "scalatest-embedded-kafka-streams" % "2.0.0" % "test"
 libraryDependencies += "com.dimafeng" %% "testcontainers-scala-scalatest" % testcontainersScalaVersion % "test"
 libraryDependencies += "com.dimafeng" %% "testcontainers-scala-kafka" % testcontainersScalaVersion % "test"
+
+libraryDependencies += "com.lihaoyi" %% "ujson" % "0.6.5"
