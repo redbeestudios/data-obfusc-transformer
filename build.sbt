@@ -41,5 +41,5 @@ libraryDependencies += "com.dimafeng" %% "testcontainers-scala-kafka" % testcont
 
 libraryDependencies += "com.lihaoyi" %% "ujson" % "0.6.5"
 
-resolvers += "Snowplow Analytics" at "http://maven.snplow.com/releases/"
+
 
