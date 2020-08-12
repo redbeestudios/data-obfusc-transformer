@@ -78,19 +78,18 @@ class ObfuscateTest extends FlatSpec with Matchers with EventHelper {
 
   "json and invalidJson" should "be posted in kafkaProducerObfuscatedTopic and kafkaProducerErrorsTopic" in {
 
-    val ansValid = consValid.poll(1000).asScala
+    val ansValid = consValid.poll(3000).asScala
     Thread.sleep(1000)
     ansValid.size shouldBe 3
     ansValid.foreach { x =>
-      val cfg = ConfigFactory.parseString(x.value())
-      val paths = props.getProperty("pathsToObfuscate").split("/")
-      cfg.getString(paths(0)) shouldNot be("Nombre")
-      cfg.getString(paths(1)) shouldNot be ("Apellido")
+      val jsonObj = ujson.read(x.value())
+      jsonObj("order")("user")("name") shouldNot be("Nombre")
+      jsonObj("order")("user")("lastname") shouldNot be ("Apellido")
       println("\n valid record: " + x.value() + "\n")
     }
 
-    val ansInvalid = consInvalid.poll(1000).asScala
-    Thread.sleep(3000)
+    val ansInvalid = consInvalid.poll(3000).asScala
+    Thread.sleep(4000)
     ansInvalid.foreach { x => println("\n invalid record: " + x.value() + "\n") }
 
     ansInvalid.size shouldBe 2

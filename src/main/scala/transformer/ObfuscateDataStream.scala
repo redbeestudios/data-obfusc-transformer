@@ -16,7 +16,7 @@ object ObfuscateDataStream {
 
   def startStream(properties: Properties, env: StreamExecutionEnvironment): Unit = {
 
-    val pathsToObfuscate: List[String] = properties.getProperty("pathsToObfuscate").split("/").toList
+    val pathsToObfuscate: List[String] = properties.getProperty("pathsToObfuscate").split(",").toList
     val consumer = KafkaUtils.kafkaConsumer(properties)
 
     val mapSideOutputs = Map(
