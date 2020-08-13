@@ -131,24 +131,17 @@ class ObfuscateTest extends FlatSpec with Matchers with ForAllTestContainer{
   consInvalid.poll(1000).asScala.size shouldBe 0
 
   producer.send(record, callback)
-  Thread.sleep(2000)
-  producer.send(record, callback)
-  Thread.sleep(2000)
-  producer.send(record, callback)
-  Thread.sleep(2000)
+
   producer.send(invalidRecord, callback)
-  Thread.sleep(2000)
-  producer.send(invalidRecord, callback)
-  Thread.sleep(2000)
-  producer.send(invalidRecord2, callback)
-  Thread.sleep(2000)
+
+  Thread.sleep(10000)
 
 
   "json and invalidJson" should "be posted in kafkaProducerObfuscatedTopic and kafkaProducerErrorsTopic" in {
 
     val ansValid = consValid.poll(60000).asScala
     Thread.sleep(5000)
-    ansValid.size shouldBe 3
+    ansValid.size shouldBe 1
     ansValid.foreach { x =>
       val jsonObj = ujson.read(x.value())
       jsonObj("order")("user")("name").value shouldBe "X".toString
@@ -160,7 +153,7 @@ class ObfuscateTest extends FlatSpec with Matchers with ForAllTestContainer{
     Thread.sleep(5000)
     ansInvalid.foreach { x => println("\n invalid record: " + x.value() + "\n") }
 
-    ansInvalid.size shouldBe 3
+    ansInvalid.size shouldBe 1
   }
 
 

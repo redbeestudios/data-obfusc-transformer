@@ -17,7 +17,7 @@ class ProcessFunctionObf(sideOutputsMap: Map[String, OutputTag[String]],
     /**
      * Procesa el HarnessEvent para pasarlo a Json. Luego lo incluye en el correspondiente sideOutput
      */
-      val newUjson = Try{ujson.read(data)}
+    val newUjson = Try{ujson.read(data)}
     newUjson match {
         case Failure(ex: Exception) =>
           val msg = s"Error. Unable to parse json event: ${ex.getMessage}."  + "["+data+"]"

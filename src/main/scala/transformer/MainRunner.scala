@@ -29,6 +29,26 @@ object MainRunner extends App {
       case _ => ""
     }
 
+    System.getProperty("kafkaConsumerTopic") match {
+      case prop: String => properties.setProperty("kafkaConsumerTopic", prop)
+      case _ => ""
+    }
+
+    System.getProperty("kafkaProducerErrorsTopic") match {
+      case prop: String => properties.setProperty("kafkaProducerErrorsTopic", prop)
+      case _ => ""
+    }
+
+    System.getProperty("kafkaProducerObfuscatedTopic") match {
+      case prop: String => properties.setProperty("kafkaProducerObfuscatedTopic", prop)
+      case _ => ""
+    }
+
+    System.getProperty("pathsToObfuscate") match {
+      case prop: String => properties.setProperty("pathsToObfuscate", prop)
+      case _ => ""
+    }
+
     ObfuscateDataStream.startStream(properties, env)
   }
 }
