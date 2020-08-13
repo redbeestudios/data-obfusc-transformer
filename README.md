@@ -38,6 +38,6 @@ docker run -e bootstrap.server={host:port} \
 	   -e kafkaConsumerTopic={topic-name} \
            -e kafkaProducerErrorsTopic={topic-name} \
            -e kafkaProducerObfuscatedTopic={topic-name} \
-           -e pathsToObfuscate={paths-to-obfuscate} \
+           -e pathsToObfuscate=order.user.name,order.user.lastname \
            zelig-data-obfuscate:1.0.0-SNAPSHOT
 
