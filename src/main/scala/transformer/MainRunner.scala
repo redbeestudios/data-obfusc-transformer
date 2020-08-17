@@ -21,7 +21,8 @@ object MainRunner extends App {
       case _ => ""
     }
     System.getProperty("kafka.broker") match {
-      case prop: String => properties.setProperty("kafka.broker", prop)
+      case prop: String =>
+        properties.setProperty("kafka.broker", prop)
       case _ => ""
     }
     System.getProperty("zookeeper.connect") match {
@@ -48,6 +49,16 @@ object MainRunner extends App {
       case prop: String => properties.setProperty("pathsToObfuscate", prop)
       case _ => ""
     }
+
+    println("kafka.broker: "+properties.get("kafka.broker")+"\n")
+    println("bootstrap.servers: "+properties.get("bootstrap.servers")+"\n")
+    println("zookeeper.connect: "+properties.get("zookeeper.connect")+"\n")
+    println("kafkaConsumerTopic: "+properties.get("kafkaConsumerTopic")+"\n")
+    println("kafkaProducerErrorsTopic: "+properties.get("kafkaProducerErrorsTopic")+"\n")
+    println("kafkaProducerObfuscatedTopic: "+properties.get("kafkaProducerObfuscatedTopic")+"\n")
+    println("pathsToObfuscate: "+properties.get("pathsToObfuscate")+"\n")
+
+    Thread.sleep(10000)
 
     ObfuscateDataStream.startStream(properties, env)
   }

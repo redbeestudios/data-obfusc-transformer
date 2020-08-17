@@ -136,7 +136,6 @@ class ObfuscateTest extends FlatSpec with Matchers with ForAllTestContainer{
 
   Thread.sleep(10000)
 
-
   "json and invalidJson" should "be posted in kafkaProducerObfuscatedTopic and kafkaProducerErrorsTopic" in {
 
     val ansValid = consValid.poll(60000).asScala

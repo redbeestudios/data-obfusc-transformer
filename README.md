@@ -32,9 +32,9 @@ Para buildear la imagen de Docker, ir al directorio del proyecto y ejectuar:
 
 Una vez hecho esto, se puede correr la imagen (incluyendo variables de entorno opcionalmente) con:
 
-docker run -e bootstrap.server={host:port} \
-	   -e kafka.broker={host:port} \
-           -e zookeeper.connect={host:port} \
+docker run -e BOOTSTRAP_SERVER={host:port} \
+	   -e KAFKA_BROKER={host:port} \
+           -e ZOOKEEPER_CONNECT={host:port} \
 	   -e kafkaConsumerTopic={topic-name} \
            -e kafkaProducerErrorsTopic={topic-name} \
            -e kafkaProducerObfuscatedTopic={topic-name} \
