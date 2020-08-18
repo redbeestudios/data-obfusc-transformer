@@ -58,7 +58,7 @@ object MainRunner extends App {
     println("kafkaProducerObfuscatedTopic: "+properties.get("kafkaProducerObfuscatedTopic")+"\n")
     println("pathsToObfuscate: "+properties.get("pathsToObfuscate")+"\n")
 
-    Thread.sleep(10000)
+    Thread.sleep(3000)
 
     ObfuscateDataStream.startStream(properties, env)
   }
