@@ -32,12 +32,9 @@ Para buildear la imagen de Docker, ir al directorio del proyecto y ejectuar:
 
 Una vez hecho esto, se puede correr la imagen (incluyendo variables de entorno opcionalmente) con:
 
-docker run -e BOOTSTRAP_SERVER={host:port} \
-	   -e KAFKA_BROKER={host:port} \
-           -e ZOOKEEPER_CONNECT={host:port} \
-	   -e kafkaConsumerTopic={topic-name} \
-           -e kafkaProducerErrorsTopic={topic-name} \
-           -e kafkaProducerObfuscatedTopic={topic-name} \
-           -e pathsToObfuscate=order.user.name,order.user.lastname \
-           zelig-data-obfuscate:1.0.0-SNAPSHOT
+docker run --net="host" zelig-data-obfuscate:1.0.0-SNAPSHOT "-Dkafka.broker={host:port} -Dbootstrap.servers={host:port} -Dzookeeper.connect={host:port} \
+							     -DkafkaConsumerTopic={topic-name} -DkafkaProducerErrorsTopic={topic-name} -DkafkaProducerObfuscatedTopic={topic-name} \
+                                                             -DpathsToObfuscate=order.user.name,order.user.lastname"
+
+
 
